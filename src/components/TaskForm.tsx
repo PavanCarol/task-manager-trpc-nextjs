@@ -77,8 +77,8 @@ export function TaskForm({ mode, task }: TaskFormProps) {
     })
   );
 
-  const isPending =
-    createMutation.isPending || updateMutation.isPending;
+  const isPending = 
+  createMutation.isPending || updateMutation.isPending;
 
   function onSubmit(data: TaskFormData) {
     setFeedback("");
@@ -89,7 +89,7 @@ export function TaskForm({ mode, task }: TaskFormProps) {
     }
 
     if (!task) {
-      setFeedback("Não foi possível identificar a tarefa.");
+      setFeedback("It was not possible to identify the task.");
       return;
     }
 
@@ -99,61 +99,77 @@ export function TaskForm({ mode, task }: TaskFormProps) {
     });
   }
 
+  const isEditing = mode === "edit";
+
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
-    >
+    <form 
+    onSubmit={handleSubmit(onSubmit)} 
+    className="space-y-7">
       <div>
         <label
           htmlFor="title"
-          className="mb-2 block text-sm font-medium text-gray-700"
+          className="mb-2 block text-sm font-semibold text-slate-700"
         >
-          Title *
+          Title <span className="text-red-500">*</span>
         </label>
 
         <input
           id="title"
           type="text"
           {...register("title")}
-          placeholder="Enter the task title"
-          className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+          placeholder="e.g. Complete project documentation"
+          className={`w-full rounded-xl border bg-white px-4 py-3.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:ring-4 ${
+            errors.title
+              ? "border-red-300 focus:border-red-400 focus:ring-red-100"
+              : "border-slate-200 focus:border-blue-500 focus:ring-blue-100"
+          }`}
         />
 
         {errors.title && (
-          <p className="mt-1 text-sm text-red-600">
+          <p className="mt-2 flex items-center gap-1.5 text-xs font-medium text-red-600">
+            <span>!</span>
             {errors.title.message}
           </p>
         )}
       </div>
 
       <div>
-        <label
-          htmlFor="description"
-          className="mb-2 block text-sm font-medium text-gray-700"
-        >
-          Description
-        </label>
+        <div className="mb-2 flex items-center justify-between">
+          <label
+            htmlFor="description"
+            className="block text-sm font-semibold text-slate-700"
+          >
+            Description
+          </label>
+          <span className="text-xs text-slate-400">Optional</span>
+        </div>
 
         <textarea
           id="description"
           {...register("description")}
-          placeholder="Describe your task (optional)"
-          rows={4}
-          className="w-full resize-none rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+          placeholder="Add more details about this task..."
+          rows={5}
+          className="w-full resize-y rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm leading-relaxed text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
         />
+        <p className="mt-2 text-xs text-slate-400">
+          Provide additional information to help you remember what needs to be done.
+        </p>
       </div>
 
       {feedback && (
-        <p className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
-          {feedback}
-        </p>
+        <div
+          role="alert"
+          className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+        >
+          <span className="font-bold">!</span>
+          <p>{feedback}</p>
+        </div>
       )}
 
-      <div className="flex justify-end gap-3">
+      <div className="flex flex-col-reverse gap-3 border-t border-slate-100 pt-6 sm:flex-row sm:justify-end">
         <Link
           href="/"
-          className="rounded-lg border border-gray-300 px-5 py-2.5 text-gray-700 hover:bg-gray-50"
+          className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
         >
           Cancel
         </Link>
@@ -161,13 +177,19 @@ export function TaskForm({ mode, task }: TaskFormProps) {
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-lg bg-blue-600 px-5 py-2.5 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isPending
-            ? "Saving..."
-            : mode === "create"
-              ? "Create task"
-              : "Save changes"}
+          {isPending ? (
+            <>
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+              Saving...
+            </>
+          ) : (
+            <>
+              {isEditing ? "Save changes" : "Create task"}
+              <span aria-hidden="true">→</span>
+            </>
+          )}
         </button>
       </div>
     </form>

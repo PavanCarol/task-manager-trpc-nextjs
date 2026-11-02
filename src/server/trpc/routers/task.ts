@@ -36,7 +36,7 @@ export const taskRouter = router({
       if (!task) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Tarefa não encontrada.",
+          message: "Task not found.",
         });
       }
 
@@ -53,7 +53,7 @@ export const taskRouter = router({
         (data) =>
           data.title !== undefined ||
           data.description !== undefined,
-        { message: "Informe pelo menos um campo para atualizar." }
+        { message: "Provide at least one field to update." }
       )
     )
     .mutation(({ input }) => {
@@ -64,7 +64,7 @@ export const taskRouter = router({
       if (!task) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Não foi possível atualizar: tarefa não encontrada.",
+          message: "Unable to update: task not found.",
         });
       }
 
@@ -79,7 +79,7 @@ export const taskRouter = router({
       if (!deleted) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Não foi possível excluir: tarefa não encontrada.",
+          message: "Could not delete: task not found",
         });
       }
 
