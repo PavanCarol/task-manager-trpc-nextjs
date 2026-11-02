@@ -1,34 +1,30 @@
 
 export interface Task {
   id: string;
-  titulo: string;
-  descricao?: string;
-  dataCriacao: number;
+  title: string;
+  description?: string;
+  creationDate: number;
 }
 
-// Temporary storage
 const tasks: Task[] = [];
 
-// List for the tasks
 export function getAllTasks(): Task[] {
   return [...tasks];
 }
 
-// Search
 export function getTaskById(id: string): Task | undefined {
   return tasks.find((task) => task.id === id);
 }
 
-// Create
 export function createTask(data: {
-  titulo: string;
-  descricao?: string;
+  title: string;
+  description?: string;
 }): Task {
   const task: Task = {
     id: crypto.randomUUID(),
-    titulo: data.titulo,
-    descricao: data.descricao,
-    dataCriacao: Date.now(),
+    title: data.title,
+    description: data.description,
+    creationDate: Date.now(),
   };
 
   tasks.push(task);
@@ -36,12 +32,11 @@ export function createTask(data: {
   return task;
 }
 
-// Update
 export function updateTask(
   id: string,
   data: {
-    titulo?: string;
-    descricao?: string;
+    title?: string;
+    description?: string;
   }
 ): Task | undefined {
   const task = getTaskById(id);
@@ -50,18 +45,17 @@ export function updateTask(
     return undefined;
   }
 
-  if (data.titulo !== undefined) {
-    task.titulo = data.titulo;
+  if (data.title !== undefined) {
+    task.title = data.title;
   }
 
-  if (data.descricao !== undefined) {
-    task.descricao = data.descricao;
+  if (data.description !== undefined) {
+    task.description = data.description;
   }
 
   return task;
 }
 
-// Delet
 export function deleteTask(id: string): boolean {
   const index = tasks.findIndex((task) => task.id === id);
 

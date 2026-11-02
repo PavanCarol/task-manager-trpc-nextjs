@@ -16,8 +16,8 @@ export const taskRouter = router({
   create: publicProcedure
     .input(
       z.object({
-        titulo: z.string().trim().min(1, "O título é obrigatório"),
-        descricao: z.string().optional(),
+        title: z.string().trim().min(1, "The title is mandatory"),
+        description: z.string().optional(),
       })
     )
     .mutation(({ input }) => {
@@ -47,12 +47,12 @@ export const taskRouter = router({
     .input(
       z.object({
         id: z.string().uuid(),
-        titulo: z.string().trim().min(1).optional(),
-        descricao: z.string().optional(),
+        title: z.string().trim().min(1).optional(),
+        description: z.string().optional(),
       }).refine(
         (data) =>
-          data.titulo !== undefined ||
-          data.descricao !== undefined,
+          data.title !== undefined ||
+          data.description !== undefined,
         { message: "Informe pelo menos um campo para atualizar." }
       )
     )
